@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Forget NFTs. GameStop Is Going About Business ‘the Old Fashion Way.’",
+    "author": "Emily Dattilo",
+    "likes": 1
+}
