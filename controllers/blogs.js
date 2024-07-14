@@ -47,11 +47,22 @@ router.get('/:id', blogFinder, async (req, res) => {
     }
   })
   
-router.delete('/:id', blogFinder, async (req, res) => {
-  if (req.blog) {
-      await req.blog.destroy()
+router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
+   // Assuming the blogFinder middleware has already attached the blog to the request
+   if (req.blog) {
+    const user = await User.findByPk(req.decodedToken.id);
+    // Check if the logged-in user is the creator of the blog
+    if (req.blog.userId === user.id) {
+      await req.blog.destroy();
+      res.status(204).end();
+    } else {
+      // If the user is not the creator, return a 403 Forbidden status
+      res.status(403).send({ error: 'You are not authorized to delete this blog' });
+    }
+  } else {
+    // If no blog is found with the given ID
+    res.status(404).end();
   }
-  res.status(204).end()
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
