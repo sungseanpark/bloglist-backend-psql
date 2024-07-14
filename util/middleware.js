@@ -5,8 +5,9 @@ const errorHandler = (error, request, response, next) => {
       return response.status(400).send({ error: 'malformatted input' })
     } 
     else if (error.name === 'SequelizeValidationError') {
+      const errorMessages = error.errors.map(e => e.message)
       return response.status(400).json({
-        error: 'malformatted input'
+        error: errorMessages
       })
     }
   
