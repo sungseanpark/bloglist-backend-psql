@@ -3,8 +3,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impvc2VwaGplb25nQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MjA5OTk4NTl9.8t2wfrE_QU-OfyBotPLZ5z1OaiOIF2mpdvA_Vsstopc
 
 {
-    "title": "Forget NFTs. GameStop Is Going About Business ‘the Old Fashion Way.’",
-    "author": "Emily Dattilo",
-    "url" : "https://www.barrons.com/articles/gamestop-stock-price-earnings-report-2be262a2",
-    "likes": 0
+    "title": "Tricep Hypertrophy Training Tips’",
+    "author": "Mike Israetel",
+    "url" : "https://rpstrength.com/blogs/articles/triceps-hypertrophy-training-tips",
+    "likes": 2
 }
