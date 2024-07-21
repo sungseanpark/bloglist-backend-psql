@@ -1,10 +1,11 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impvc2VwaGplb25nQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MjA5OTk4NTl9.8t2wfrE_QU-OfyBotPLZ5z1OaiOIF2mpdvA_Vsstopc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlYW5wYXJrQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MjE1OTkxOTd9.vB0PdEfx2r2sB4dLPiQpPnfsXWgSBMLHpQZN5EwstUw
 
 {
     "title": "Tricep Hypertrophy Training Tips’",
     "author": "Mike Israetel",
     "url" : "https://rpstrength.com/blogs/articles/triceps-hypertrophy-training-tips",
-    "likes": 2
+    "likes": 2,
+    "year": 2024
 }
