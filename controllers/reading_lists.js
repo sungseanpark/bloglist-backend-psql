@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const { ReadingList, User } = require('../models')
 const { SECRET } = require('../util/config')
 
+const { validateToken } = require('../util/middleware')
+
 const tokenExtractor = (req, res, next) => {
     const authorization = req.get('authorization')
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -33,11 +35,11 @@ router.post('/', async (req, res) => {
     res.json(reading_list)
 })
 
-router.put('/:id', tokenExtractor, async (req, res) => {
+router.put('/:id', tokenExtractor, validateToken, async (req, res) => {
     const reading_list = await ReadingList.findByPk(req.params.id)
     if(reading_list){
         const user = await User.findByPk(req.decodedToken.id);
-        if(reading_list.userId === user.id){
+        if(reading_list.userId === user.id && !user.disabled){
             reading_list.read = req.body.read
             await reading_list.save()
             res.json(reading_list)

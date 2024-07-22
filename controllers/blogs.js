@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const { Blog, User } = require('../models')
 const { SECRET } = require('../util/config')
+const { validateToken } = require('../util/middleware')
 
 const { Op } = require('sequelize')
 
@@ -56,10 +57,16 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post('/', tokenExtractor, async (req, res) => {
+router.post('/', tokenExtractor, validateToken, async (req, res) => {
   const user = await User.findByPk(req.decodedToken.id)
-  const blog = await Blog.create({...req.body, userId: user.id})
-  return res.json(blog)
+  if(!user.disabled){
+    const blog = await Blog.create({...req.body, userId: user.id})
+    return res.json(blog)
+  }
+  else{
+    return res.status(403).send({ error: 'You are not authorized to create a blog' });
+  }
+  
     
 })
 
@@ -76,12 +83,12 @@ router.get('/:id', blogFinder, async (req, res) => {
     }
   })
   
-router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
+router.delete('/:id', blogFinder, tokenExtractor, validateToken, async (req, res) => {
    // Assuming the blogFinder middleware has already attached the blog to the request
    if (req.blog) {
     const user = await User.findByPk(req.decodedToken.id);
     // Check if the logged-in user is the creator of the blog
-    if (req.blog.userId === user.id) {
+    if (req.blog.userId === user.id && !user.disabled) {
       await req.blog.destroy();
       res.status(204).end();
     } else {
