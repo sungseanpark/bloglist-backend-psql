@@ -1,6 +1,22 @@
 const router = require('express').Router()
+const jwt = require('jsonwebtoken')
 
-const { ReadingList } = require('../models')
+const { ReadingList, User } = require('../models')
+const { SECRET } = require('../util/config')
+
+const tokenExtractor = (req, res, next) => {
+    const authorization = req.get('authorization')
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      try {
+        req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+      } catch{
+        return res.status(401).json({ error: 'token invalid' })
+      }
+    }  else {
+      return res.status(401).json({ error: 'token missing' })
+    }
+    next()
+  }
 
 // router.get('/', async (req, res) => {
 //     const users = await User.findAll({
@@ -15,6 +31,24 @@ const { ReadingList } = require('../models')
 router.post('/', async (req, res) => {
     const reading_list = await ReadingList.create(req.body)
     res.json(reading_list)
+})
+
+router.put('/:id', tokenExtractor, async (req, res) => {
+    const reading_list = await ReadingList.findByPk(req.params.id)
+    if(reading_list){
+        const user = await User.findByPk(req.decodedToken.id);
+        if(reading_list.userId === user.id){
+            reading_list.read = req.body.read
+            await reading_list.save()
+            res.json(reading_list)
+        }
+        else{
+            res.status(403).send({ error: 'You are not authorized to modify this reading list' });
+        }
+    }
+    else{
+        res.status(404).end()
+    }
 })
 
 // router.put('/:username', async (req, res) => {
