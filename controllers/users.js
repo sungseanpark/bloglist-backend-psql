@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingList } = require('../models')
 
 router.get('/', async (req, res) => {
     const users = await User.findAll({
@@ -42,13 +42,10 @@ router.get('/:id', async (req, res) => {
         model: Blog,
         as: 'readings',
         attributes: { exclude: ['userId', 'createdAt', 'updatedAt']},
-        through: {
-          attributes: []
-        },
-        // include: {
-        //   model: User,
-        //   attributes: ['name']
-        // }
+        through:{
+          as: 'readinglists',
+          attributes: ['read', 'id']
+        }
       },
     ]
   })
